@@ -1,4 +1,5 @@
 <img width="730" height="806" alt="image" src="https://github.com/user-attachments/assets/14731c14-3600-4569-a8d0-e596b640e3f5" />
+
 I. Nhóm Bảng Hạ Tầng Bãi Xe (Vị Trí Đỗ)
 Nhóm này quản lý mô hình không gian của tòa nhà gửi xe, giải quyết trực tiếp yêu cầu "Phân tầng theo loại xe" và "Theo dõi trạng thái ô đỗ".
 
