@@ -18,20 +18,33 @@ namespace Project_PRN212
     public partial class MainWindow : Window
     {
         // Khởi tạo Database Context (Lưu ý: Tên DB Context có thể khác tùy vào tên Database bạn đặt)
-        ParkingManagementDbContext _context = new ParkingManagementDbContext();
+        //ParkingManagementDbContext _context = new ParkingManagementDbContext();
         public MainWindow()
         {
             InitializeComponent();
 
-            // Load dữ liệu bảng Loại xe (VehicleTypes) lên DataGrid
-            LoadData();
+            // Căn giữa màn hình khi chạy
+            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        }
+        // Sự kiện khi bấm nút "Quản Lý Loại Xe"
+        private void btnManageVehicles_Click(object sender, RoutedEventArgs e)
+        {
+            // 1. Khởi tạo form con
+            frmVehicleType frm = new frmVehicleType();
+
+            // 2. Tùy chọn: Chỉnh form con căn giữa màn hình cha
+            frm.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
+            // 3. Mở form con lên (Bắt buộc phải tắt form này mới quay lại Menu được)
+            frm.ShowDialog();
         }
 
-        private void LoadData()
+        // Sự kiện khi bấm nút "Đăng xuất"
+        private void btnLogout_Click(object sender, RoutedEventArgs e)
         {
-            // Lấy danh sách loại xe từ DB và gán vào DataGrid
-            var vehicleTypes = _context.VehicleTypes.ToList();
-            dgVehicleTypes.ItemsSource = vehicleTypes;
+            MessageBox.Show("Đã đăng xuất khỏi hệ thống!");
+            this.Close(); // Đóng MainWindow
         }
+
     }
 }

@@ -6,8 +6,38 @@
         xmlns:local="clr-namespace:Project_PRN212"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Canvas>
-        <DataGrid x:Name="dgVehicleTypes" AutoGenerateColumns="True" Margin="20"/>
+    <Canvas Background="#2C3E50">
+        <TextBlock Text="HỆ THỐNG QUẢN LÝ TÒA NHÀ GỬI XE" 
+               Foreground="White" FontSize="24" FontWeight="Bold" 
+               Canvas.Left="20" Canvas.Top="20"/>
+
+        <TextBlock Text="Xin chào, Manager!" 
+               Foreground="#BDC3C7" FontSize="14" 
+               Canvas.Left="20" Canvas.Top="55"/>
+
+        <TextBlock Text="QUẢN LÝ DANH MỤC" Foreground="White" FontWeight="Bold" Canvas.Left="20" Canvas.Top="100"/>
+
+        <Button x:Name="btnManageVehicles" Content="Quản Lý Loại Xe" Click="btnManageVehicles_Click"
+            Canvas.Left="20" Canvas.Top="130" Width="150" Height="80" 
+            Background="#34495E" Foreground="White" FontWeight="Bold" Cursor="Hand"/>
+
+        <Button x:Name="btnManageSlots" Content="Quản Lý Chỗ Đỗ" 
+            Canvas.Left="190" Canvas.Top="130" Width="150" Height="80" 
+            Background="#34495E" Foreground="White" FontWeight="Bold" Cursor="Hand"/>
+
+        <TextBlock Text="VẬN HÀNH BÃI XE" Foreground="White" FontWeight="Bold" Canvas.Left="20" Canvas.Top="240"/>
+
+        <Button x:Name="btnCheckIn" Content="Cổng Xe Vào" 
+            Canvas.Left="20" Canvas.Top="270" Width="150" Height="80" 
+            Background="#27AE60" Foreground="White" FontWeight="Bold" Cursor="Hand"/>
+
+        <Button x:Name="btnCheckOut" Content="Cổng Xe Ra" 
+            Canvas.Left="190" Canvas.Top="270" Width="150" Height="80" 
+            Background="#E74C3C" Foreground="White" FontWeight="Bold" Cursor="Hand"/>
+
+        <Button x:Name="btnLogout" Content="Đăng Xuất" Click="btnLogout_Click"
+            Canvas.Left="20" Canvas.Top="380" Width="320" Height="40" 
+            Background="#95A5A6" Foreground="White" FontWeight="Bold" Cursor="Hand"/>
 
     </Canvas>
 </Window>
