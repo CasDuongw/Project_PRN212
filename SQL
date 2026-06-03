@@ -1,0 +1,79 @@
+CREATE DATABASE ParkingManagementDB;
+GO
+USE ParkingManagementDB;
+GO
+
+-- 1. Bảng Chức vụ
+CREATE TABLE Roles (
+    RoleID INT IDENTITY(1,1) PRIMARY KEY,
+    RoleName NVARCHAR(50) NOT NULL UNIQUE
+);
+
+-- 2. Bảng Người dùng
+CREATE TABLE Users (
+    UserID INT IDENTITY(1,1) PRIMARY KEY,
+    Username VARCHAR(50) NOT NULL UNIQUE,
+    Password VARCHAR(255) NOT NULL, -- Sau này nên hash password
+    FullName NVARCHAR(100) NOT NULL,
+    Email VARCHAR(100),
+    Phone VARCHAR(15),
+    RoleID INT FOREIGN KEY REFERENCES Roles(RoleID)
+);
+
+-- 3. Bảng Loại phương tiện
+CREATE TABLE VehicleTypes (
+    VehicleTypeID INT IDENTITY(1,1) PRIMARY KEY,
+    TypeName NVARCHAR(50) NOT NULL UNIQUE, -- Xe máy, Ô tô 4 chỗ, Ô tô 7 chỗ...
+    Description NVARCHAR(255)
+);
+
+-- 4. Bảng Xe (Dành cho Driver đã đăng ký tài khoản)
+CREATE TABLE Vehicles (
+    VehicleID INT IDENTITY(1,1) PRIMARY KEY,
+    LicensePlate VARCHAR(20) NOT NULL UNIQUE, -- Biển số xe
+    VehicleTypeID INT FOREIGN KEY REFERENCES VehicleTypes(VehicleTypeID),
+    OwnerID INT FOREIGN KEY REFERENCES Users(UserID) -- Là Driver
+);
+
+-- 5. Bảng Tầng / Khu vực (Phân tầng theo loại xe)
+CREATE TABLE Zones (
+    ZoneID INT IDENTITY(1,1) PRIMARY KEY,
+    ZoneName NVARCHAR(50) NOT NULL, -- Tầng 1, Tầng 2, Khu A, Khu B
+    VehicleTypeID INT FOREIGN KEY REFERENCES VehicleTypes(VehicleTypeID) -- Tầng này chỉ cho loại xe này vào
+);
+
+-- 6. Bảng Vị trí đỗ xe
+CREATE TABLE ParkingSlots (
+    SlotID INT IDENTITY(1,1) PRIMARY KEY,
+    SlotCode VARCHAR(20) NOT NULL UNIQUE, -- Ví dụ: T1-A01 (Tầng 1 - Ô A01)
+    ZoneID INT FOREIGN KEY REFERENCES Zones(ZoneID),
+    Status INT NOT NULL DEFAULT 0 -- 0: Trống, 1: Đang đỗ, 2: Đã đặt trước, 3: Bảo trì
+);
+
+-- 7. Bảng Cấu hình giá tiền
+CREATE TABLE PriceConfigs (
+    PriceConfigID INT IDENTITY(1,1) PRIMARY KEY,
+    VehicleTypeID INT FOREIGN KEY REFERENCES VehicleTypes(VehicleTypeID),
+    PricePerHour DECIMAL(10,2) NOT NULL, -- Giá mỗi giờ gửi
+    PricePerDay DECIMAL(10,2) NOT NULL,  -- Giá gửi qua đêm/ngày
+    ApplyDate DATETIME DEFAULT GETDATE()
+);
+
+-- 8. Bảng Lượt gửi xe (Vòng đời Xe vào -> Xe ra)
+CREATE TABLE ParkingSessions (
+    SessionID INT IDENTITY(1,1) PRIMARY KEY,
+    CardCode VARCHAR(50) NOT NULL, -- Mã thẻ xe / Mã QR vãng lai
+    LicensePlate VARCHAR(20) NOT NULL, -- Biển số lúc quét vào
+    VehicleID INT NULL FOREIGN KEY REFERENCES Vehicles(VehicleID), -- Có thể NULL nếu là khách vãng lai
+    SlotID INT FOREIGN KEY REFERENCES ParkingSlots(SlotID),
+    
+    CheckInTime DATETIME NOT NULL DEFAULT GETDATE(),
+    CheckOutTime DATETIME NULL,
+    
+    StaffInID INT FOREIGN KEY REFERENCES Users(UserID),  -- Nhân viên cho vào
+    StaffOutID INT NULL FOREIGN KEY REFERENCES Users(UserID), -- Nhân viên cho ra
+    
+    TotalFee DECIMAL(10,2) NULL, -- Tổng tiền phải trả (Tính lúc ra)
+    Status INT NOT NULL DEFAULT 1 -- 1: Xe đang trong bãi, 2: Đã ra và thanh toán xong, 3: Sự cố (Mất vé...)
+);
+GO
